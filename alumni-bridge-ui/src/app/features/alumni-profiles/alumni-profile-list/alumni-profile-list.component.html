@@ -1,0 +1,81 @@
+<div class="page-container">
+  <app-page-header
+    title="Alumni Profiles"
+    subtitle="Manage former employees and their engagement"
+  >
+    <button mat-raised-button color="primary" (click)="create()" *ngIf="canManage">
+      <mat-icon>add</mat-icon>
+      New Profile
+    </button>
+  </app-page-header>
+
+  <mat-card class="table-card">
+    <div class="table-toolbar">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>Search</mat-label>
+        <input matInput placeholder="Name, employee ID or organisation" [(ngModel)]="filterText" (ngModelChange)="applyFilters()" />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Status</mat-label>
+        <mat-select [(ngModel)]="statusFilter" (ngModelChange)="applyFilters()">
+          <mat-option value="ALL">All statuses</mat-option>
+          <mat-option *ngFor="let s of statuses" [value]="s">{{ s | enumLabel }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <span class="spacer"></span>
+      <button mat-stroked-button (click)="load()"><mat-icon>refresh</mat-icon> Refresh</button>
+    </div>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <table mat-table [dataSource]="dataSource" matSort class="data-table">
+      <ng-container matColumnDef="alumniId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.alumniId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let row">{{ row.name || 'Employee ' + row.employeeId }}</td>
+      </ng-container>
+      <ng-container matColumnDef="formerEmployeeId">
+        <th mat-header-cell *matHeaderCellDef>Former Emp. ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.formerEmployeeId || '—' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="currentOrganisation">
+        <th mat-header-cell *matHeaderCellDef>Current Org.</th>
+        <td mat-cell *matCellDef="let row">{{ row.currentOrganisation || '—' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="engagementTier">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Engagement</th>
+        <td mat-cell *matCellDef="let row">{{ (row.engagementTier | enumLabel) || '—' }}</td>
+      </ng-container>
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="status-chip" [ngClass]="statusClass(row.status)">{{ row.status | enumLabel }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col">Actions</th>
+        <td mat-cell *matCellDef="let row" class="actions-col">
+          <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="view(row)"><mat-icon>visibility</mat-icon><span>View</span></button>
+            <button mat-menu-item (click)="edit(row)" *ngIf="canManage"><mat-icon>edit</mat-icon><span>Edit</span></button>
+            <button mat-menu-item (click)="deactivate(row)" *ngIf="canManage"><mat-icon>block</mat-icon><span>Deactivate</span></button>
+            <button mat-menu-item (click)="remove(row)" *ngIf="isAdmin"><mat-icon color="warn">delete</mat-icon><span>Delete</span></button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="no-data-row" [attr.colspan]="displayedColumns.length"><span *ngIf="!loading">No alumni profiles found.</span></td>
+      </tr>
+    </table>
+
+    <mat-paginator [pageSizeOptions]="[10, 25, 50]" pageSize="10" showFirstLastButtons></mat-paginator>
+  </mat-card>
+</div>

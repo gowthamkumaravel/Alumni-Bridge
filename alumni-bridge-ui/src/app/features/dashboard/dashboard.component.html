@@ -1,0 +1,35 @@
+<div class="page-container">
+  <app-page-header
+    [title]="'Welcome, ' + (user?.name || '')"
+    [subtitle]="'Signed in as ' + roleLabel"
+  ></app-page-header>
+
+  <mat-card class="p-3 mb-3">
+    <p class="m-0 text-secondary">
+      Use the navigation on the left to manage offboarding, alumni engagement and
+      administration. The shortcuts below open the modules available to your role.
+    </p>
+  </mat-card>
+
+  <div class="row g-3">
+    <div class="col-6 col-md-4 col-lg-3" *ngFor="let item of shortcuts">
+      <a
+        mat-ripple
+        class="card h-100 align-items-center justify-content-center text-center text-decoration-none p-4"
+        style="color: #37474f"
+        [routerLink]="item.route"
+      >
+        <mat-icon style="color: #3f51b5; font-size: 32px; height: 32px; width: 32px">{{
+          item.icon
+        }}</mat-icon>
+        <span class="fw-medium small mt-2">{{ item.label }}</span>
+      </a>
+    </div>
+  </div>
+
+  <app-empty-state
+    *ngIf="shortcuts.length === 0"
+    icon="lock"
+    message="No modules are available for your role yet."
+  ></app-empty-state>
+</div>

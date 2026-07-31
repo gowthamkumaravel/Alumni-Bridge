@@ -1,0 +1,54 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Edit Offboarding Case' : 'New Offboarding Case' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" class="dialog-form" id="caseForm" (ngSubmit)="save()">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Employee (User ID)</mat-label>
+        <input matInput type="number" formControlName="employeeId" />
+        <mat-error>Employee ID is required</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>HRBP Owner (User ID)</mat-label>
+        <input matInput type="number" formControlName="hrbpOwnerId" />
+        <mat-error>HRBP owner is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Departure Type</mat-label>
+        <mat-select formControlName="departureType">
+          <mat-option *ngFor="let t of departureTypes" [value]="t">
+            {{ t | enumLabel }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Working Date</mat-label>
+        <input matInput [matDatepicker]="picker" formControlName="lastWorkingDate" />
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error>Last working date is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline" *ngIf="isEdit">
+      <mat-label>Status</mat-label>
+      <mat-select formControlName="status">
+        <mat-option *ngFor="let s of statuses" [value]="s">
+          {{ s | enumLabel }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="saving">Cancel</button>
+  <button mat-raised-button color="primary" type="submit" form="caseForm" [disabled]="saving">
+    {{ isEdit ? 'Save Changes' : 'Create' }}
+  </button>
+</mat-dialog-actions>

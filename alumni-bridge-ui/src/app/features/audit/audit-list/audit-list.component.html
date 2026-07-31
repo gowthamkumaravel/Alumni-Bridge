@@ -1,0 +1,119 @@
+<div class="page-container">
+  <app-page-header
+    title="Audit Logs"
+    subtitle="System activity recorded across all modules"
+  ></app-page-header>
+
+  <mat-card class="table-card">
+    <div class="table-toolbar">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          placeholder="Action, user or module"
+          [(ngModel)]="filter.text"
+          (ngModelChange)="applyFilters()"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>Module</mat-label>
+        <mat-select [(ngModel)]="filter.module" (ngModelChange)="applyFilters()">
+          <mat-option value="ALL">All modules</mat-option>
+          <mat-option *ngFor="let m of modules" [value]="m">{{ m }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic" class="user-field">
+        <mat-label>Employee ID</mat-label>
+        <input
+          matInput
+          [(ngModel)]="filter.employeeId"
+          (ngModelChange)="applyFilters()"
+        />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>From</mat-label>
+        <input
+          matInput
+          [matDatepicker]="fromPicker"
+          [(ngModel)]="filter.from"
+          (ngModelChange)="applyFilters()"
+        />
+        <mat-datepicker-toggle matSuffix [for]="fromPicker"></mat-datepicker-toggle>
+        <mat-datepicker #fromPicker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" subscriptSizing="dynamic">
+        <mat-label>To</mat-label>
+        <input
+          matInput
+          [matDatepicker]="toPicker"
+          [(ngModel)]="filter.to"
+          (ngModelChange)="applyFilters()"
+        />
+        <mat-datepicker-toggle matSuffix [for]="toPicker"></mat-datepicker-toggle>
+        <mat-datepicker #toPicker></mat-datepicker>
+      </mat-form-field>
+
+      <button mat-button (click)="clearFilters()">Clear</button>
+      <span class="spacer"></span>
+      <button mat-stroked-button (click)="load()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <table mat-table [dataSource]="dataSource" matSort class="data-table">
+      <ng-container matColumnDef="auditId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+        <td mat-cell *matCellDef="let row">{{ row.auditId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="userName">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>User</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.userName || 'Employee ' + row.employeeId }}
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
+        <td mat-cell *matCellDef="let row">{{ row.action }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="module">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Module</th>
+        <td mat-cell *matCellDef="let row">
+          <span class="status-chip">{{ row.module }}</span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Timestamp</th>
+        <td mat-cell *matCellDef="let row">
+          {{ row.timestamp | date: 'medium' }}
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="no-data-row" [attr.colspan]="displayedColumns.length">
+          <span *ngIf="!loading">No audit records found.</span>
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[10, 25, 50, 100]"
+      pageSize="25"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card>
+</div>

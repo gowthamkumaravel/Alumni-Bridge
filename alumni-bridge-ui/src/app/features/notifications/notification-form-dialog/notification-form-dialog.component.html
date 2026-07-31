@@ -1,0 +1,65 @@
+<h2 mat-dialog-title>New Notification</h2>
+
+<mat-dialog-content>
+  <form
+    [formGroup]="form"
+    class="dialog-form"
+    id="notificationForm"
+    (ngSubmit)="save()"
+  >
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Recipient Employee ID</mat-label>
+        <input matInput formControlName="employeeId" />
+        <mat-error *ngIf="form.get('employeeId')?.hasError('required')">
+          Employee ID is required
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Category</mat-label>
+        <mat-select formControlName="category">
+          <mat-option *ngFor="let category of categories" [value]="category">
+            {{ category | enumLabel }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Recipient Name</mat-label>
+        <input matInput formControlName="userName" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Recipient Email</mat-label>
+        <input matInput type="email" formControlName="userEmail" />
+        <mat-error *ngIf="form.get('userEmail')?.hasError('email')">
+          Enter a valid email
+        </mat-error>
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Message</mat-label>
+      <textarea matInput rows="4" formControlName="message"></textarea>
+      <mat-error *ngIf="form.get('message')?.hasError('required')">
+        Message is required
+      </mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close [disabled]="saving">Cancel</button>
+  <button
+    mat-raised-button
+    color="primary"
+    type="submit"
+    form="notificationForm"
+    [disabled]="saving"
+  >
+    Send
+  </button>
+</mat-dialog-actions>

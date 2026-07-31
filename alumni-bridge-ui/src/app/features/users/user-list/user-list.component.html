@@ -1,0 +1,114 @@
+<div class="page-container">
+  <app-page-header
+    title="User Management"
+    subtitle="Create and manage employee, HR and alumni accounts"
+  >
+    <button mat-raised-button color="primary" (click)="create()" *ngIf="isAdmin">
+      <mat-icon>add</mat-icon>
+      New User
+    </button>
+  </app-page-header>
+
+  <mat-card class="table-card">
+    <div class="table-toolbar">
+      <mat-form-field appearance="outline" class="search-field" subscriptSizing="dynamic">
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          placeholder="Name, email or employee ID"
+          (keyup)="applySearch($any($event.target).value)"
+        />
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <span class="spacer"></span>
+      <button mat-stroked-button (click)="load()">
+        <mat-icon>refresh</mat-icon>
+        Refresh
+      </button>
+    </div>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
+
+    <table mat-table [dataSource]="dataSource" matSort class="data-table">
+      <ng-container matColumnDef="employeeId">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Employee ID</th>
+        <td mat-cell *matCellDef="let user">{{ user.employeeId }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let user">{{ user.name }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+        <td mat-cell *matCellDef="let user">{{ user.email }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="role">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
+        <td mat-cell *matCellDef="let user">
+          <span class="status-chip" [ngClass]="roleClass(user.role)">
+            {{ user.role | enumLabel }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="accountType">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Account</th>
+        <td mat-cell *matCellDef="let user">{{ user.accountType | enumLabel }}</td>
+      </ng-container>
+
+      <ng-container matColumnDef="status">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+        <td mat-cell *matCellDef="let user">
+          <span class="status-chip" [ngClass]="statusClass(user.status)">
+            {{ user.status | enumLabel }}
+          </span>
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef class="actions-col">Actions</th>
+        <td mat-cell *matCellDef="let user" class="actions-col">
+          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Actions">
+            <mat-icon>more_vert</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="edit(user)" *ngIf="isAdmin">
+              <mat-icon>edit</mat-icon>
+              <span>Edit</span>
+            </button>
+            <button mat-menu-item (click)="deactivate(user)">
+              <mat-icon>block</mat-icon>
+              <span>Deactivate</span>
+            </button>
+            <button mat-menu-item (click)="convertToAlumni(user)">
+              <mat-icon>switch_account</mat-icon>
+              <span>Convert to Alumni</span>
+            </button>
+            <button mat-menu-item (click)="remove(user)" *ngIf="isAdmin">
+              <mat-icon color="warn">delete</mat-icon>
+              <span>Delete</span>
+            </button>
+          </mat-menu>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+
+      <tr class="mat-row" *matNoDataRow>
+        <td class="no-data-row" [attr.colspan]="displayedColumns.length">
+          <span *ngIf="!loading">No users found.</span>
+        </td>
+      </tr>
+    </table>
+
+    <mat-paginator
+      [pageSizeOptions]="[10, 25, 50]"
+      pageSize="10"
+      showFirstLastButtons
+    ></mat-paginator>
+  </mat-card>
+</div>

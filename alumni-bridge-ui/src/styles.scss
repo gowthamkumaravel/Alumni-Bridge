@@ -1,0 +1,154 @@
+/* Global application styles.
+   Bootstrap 5 (loaded via angular.json) provides the reset, layout and utility
+   classes. Only app-specific design tokens and the shared component styling that
+   Bootstrap utilities cannot express are kept here. */
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+  background-color: #f4f5f7;
+  color: #2b2b2b;
+}
+
+a {
+  color: #3f51b5;
+}
+
+/* Page wrapper used by every feature screen. */
+.page-container {
+  padding: 24px;
+}
+
+.mat-elevation-z1 {
+  background: #ffffff;
+}
+
+/* Shared list/table styling. */
+table.data-table {
+  width: 100%;
+}
+
+table.data-table th {
+  font-weight: 500;
+  color: #555;
+}
+
+.table-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+.table-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  flex-wrap: wrap;
+}
+
+.table-toolbar .search-field {
+  width: 260px;
+}
+
+.no-data-row {
+  padding: 24px;
+  text-align: center;
+  color: #777;
+}
+
+.actions-col {
+  width: 80px;
+  text-align: center;
+}
+
+.user-field {
+  width: 120px;
+}
+
+.message-cell {
+  max-width: 340px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Status chips. */
+.status-chip {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+  background: #eceff1;
+  color: #37474f;
+  white-space: nowrap;
+}
+
+.status-chip.green {
+  background: #e6f4ea;
+  color: #1e7e34;
+}
+
+.status-chip.amber {
+  background: #fff4e5;
+  color: #b26a00;
+}
+
+.status-chip.red {
+  background: #fdecea;
+  color: #b71c1c;
+}
+
+.status-chip.blue {
+  background: #e8eaf6;
+  color: #303f9f;
+}
+
+/* Dialog forms. */
+.dialog-form {
+  display: flex;
+  flex-direction: column;
+  min-width: 420px;
+}
+
+.dialog-form mat-form-field {
+  width: 100%;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row > * {
+  flex: 1;
+}
+
+.detail-grid {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  row-gap: 10px;
+  column-gap: 16px;
+  min-width: 420px;
+}
+
+.detail-grid .label {
+  font-weight: 500;
+  color: #555;
+}
+
+@media (max-width: 599px) {
+  .dialog-form,
+  .detail-grid {
+    min-width: 260px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+}

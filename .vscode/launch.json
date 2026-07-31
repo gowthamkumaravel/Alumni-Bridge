@@ -1,0 +1,21 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "EurekaServerApplication",
+            "request": "launch",
+            "mainClass": "com.aluminibackend.eureka.EurekaServerApplication",
+            "projectName": "eureka-server"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-AlumniBridgeApplication<AlumniBridge>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "com.aluminibackend.api.AlumniBridgeApplication",
+            "projectName": "AlumniBridge",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
